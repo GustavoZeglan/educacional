@@ -2,6 +2,9 @@ package br.grupointegrado.trabalho.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "cursos")
 public class Curso {
@@ -18,6 +21,9 @@ public class Curso {
 
     @Column()
     private Integer cargaHoraria;
+
+    @OneToMany(mappedBy = "curso")
+    private List<Turma> turmas = new ArrayList<>();
 
     public Integer getId() {
         return id;
