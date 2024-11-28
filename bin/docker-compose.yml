@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: trabalho-java
+    restart: always
+    environment:
+      MYSQL_DATABASE: educacional
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: 1234
+    ports:
+      - '3306:3306'
+    volumes:
+      - trabalho-volume:/var/lib/mysql
+    networks:
+      - trabalho-network
+volumes:
+  trabalho-volume:
+    driver: local
+
+networks:
+  trabalho-network:
