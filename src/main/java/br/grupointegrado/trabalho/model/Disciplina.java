@@ -2,12 +2,9 @@ package br.grupointegrado.trabalho.model;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "cursos")
-public class Curso {
+@Table(name = "disciplinas")
+public class Disciplina {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +16,13 @@ public class Curso {
     @Column(length = 20)
     private String codigo;
 
-    @Column()
-    private Integer cargaHoraria;
+    @ManyToOne
+    @JoinColumn(name = "curso_id")
+    private Curso curso;
 
-    @OneToMany(mappedBy = "curso")
-    private List<Turma> turmas = new ArrayList<>();
-
-    @OneToMany(mappedBy = "curso")
-    List<Disciplina> disciplinas = new ArrayList<>();
+    @ManyToOne()
+    @JoinColumn(name = "professor_id")
+    private Professor professor;
 
     public Integer getId() {
         return id;
@@ -34,6 +30,22 @@ public class Curso {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Professor getProfessor() {
+        return professor;
+    }
+
+    public void setProfessor(Professor professor) {
+        this.professor = professor;
+    }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
     }
 
     public String getNome() {
@@ -50,13 +62,5 @@ public class Curso {
 
     public void setCodigo(String codigo) {
         this.codigo = codigo;
-    }
-
-    public Integer getCargaHoraria() {
-        return cargaHoraria;
-    }
-
-    public void setCargaHoraria(Integer cargaHoraria) {
-        this.cargaHoraria = cargaHoraria;
     }
 }

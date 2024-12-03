@@ -1,6 +1,7 @@
 package br.grupointegrado.trabalho.model;
 
 import java.sql.Date;
+import java.util.List;
 
 import jakarta.persistence.*;
 
@@ -23,7 +24,10 @@ public class Aluno {
 
     @Column
     private Date dataNascimento;
-    
+
+    @OneToMany(mappedBy = "aluno")
+    private List<Matricula> matriculas;
+
     public Integer getId() {
         return id;
     }

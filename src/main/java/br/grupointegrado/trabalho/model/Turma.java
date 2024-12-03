@@ -2,6 +2,8 @@ package br.grupointegrado.trabalho.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "turmas")
 public class Turma {
@@ -19,6 +21,9 @@ public class Turma {
     @ManyToOne
     @JoinColumn(name = "curso_id")
     private Curso curso;
+
+    @OneToMany(mappedBy = "turma")
+    private List<Matricula> matriculas;
 
     public Integer getId() {
         return id;

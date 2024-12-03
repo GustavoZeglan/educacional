@@ -2,6 +2,9 @@ package br.grupointegrado.trabalho.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "professores")
 public class Professor {
@@ -21,6 +24,9 @@ public class Professor {
 
     @Column(length = 100)
     private String especialidade;
+
+    @OneToMany(mappedBy = "professor")
+    private List<Disciplina> disciplinas = new ArrayList<>();
 
     public Integer getId() {
         return id;
