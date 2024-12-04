@@ -1,6 +1,7 @@
 package br.grupointegrado.trabalho.model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -25,7 +26,7 @@ public class Aluno {
     @Column
     private Date dataNascimento;
 
-    @OneToMany(mappedBy = "aluno")
+    @OneToMany(mappedBy = "aluno", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Matricula> matriculas;
 
     public Integer getId() {
@@ -67,5 +68,20 @@ public class Aluno {
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
-    
+
+    public List<Matricula> getMatriculas() {
+        return matriculas;
+    }
+
+    public void setMatriculas(List<Matricula> matriculas) {
+        this.matriculas = matriculas;
+    }
+
+    public void addMatricula(Matricula matricula) {
+        if(this.matriculas == null) {
+            this.matriculas = new ArrayList<>();
+        }
+        this.matriculas.add(matricula);
+    }
+
 }

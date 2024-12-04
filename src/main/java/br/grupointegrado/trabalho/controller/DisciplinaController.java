@@ -2,9 +2,11 @@ package br.grupointegrado.trabalho.controller;
 import br.grupointegrado.trabalho.dto.DisciplinaRequestDTO;
 import br.grupointegrado.trabalho.model.Curso;
 import br.grupointegrado.trabalho.model.Disciplina;
+import br.grupointegrado.trabalho.model.Nota;
 import br.grupointegrado.trabalho.model.Professor;
 import br.grupointegrado.trabalho.repository.CursoRepository;
 import br.grupointegrado.trabalho.repository.DisciplinaRepository;
+import br.grupointegrado.trabalho.repository.NotaRepository;
 import br.grupointegrado.trabalho.repository.ProfessorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,9 @@ public class DisciplinaController {
 
     @Autowired
     private CursoRepository cursoRepository;
+
+    @Autowired
+    private NotaRepository notaRepository;
 
     @PostMapping()
     public ResponseEntity<Disciplina> save(@RequestBody DisciplinaRequestDTO dto) {
@@ -66,6 +71,17 @@ public class DisciplinaController {
 
         return ResponseEntity.ok(disciplinaRepository.save(disciplina));
     }
+
+    @GetMapping("/{id}/notas")
+    public ResponseEntity<List<Nota>> findNotas(@PathVariable Integer id) {
+        Disciplina disciplina = this.disciplinaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Disciplina não encontrada."));
+
+        List<Nota> notas = this.notaRepository.findByDisciplina(disciplina);
+
+        return ResponseEntity.ok(notas);
+    }
+
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Integer id) {

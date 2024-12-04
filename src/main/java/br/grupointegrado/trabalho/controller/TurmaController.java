@@ -1,12 +1,16 @@
 package br.grupointegrado.trabalho.controller;
 import br.grupointegrado.trabalho.dto.TurmaRequestDTO;
 import br.grupointegrado.trabalho.model.Curso;
+import br.grupointegrado.trabalho.model.Matricula;
+import br.grupointegrado.trabalho.model.Nota;
 import br.grupointegrado.trabalho.model.Turma;
 import br.grupointegrado.trabalho.repository.CursoRepository;
 import br.grupointegrado.trabalho.repository.TurmaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -41,6 +45,19 @@ public class TurmaController {
     public ResponseEntity<List<Turma>> findAll() {
         List<Turma> turmas = this.turmaRepository.findAll();
         return ResponseEntity.ok(turmas);
+    }
+
+    @GetMapping("/{id}/notas")
+    public ResponseEntity<List<Nota>> findNotes(@PathVariable Integer id) {
+        Turma turma = this.turmaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Turma não encontrada."));
+
+        List<Nota> notas = new ArrayList<>();
+        for(Matricula matricula : turma.getMatriculas()) {
+            notas.addAll(matricula.getNotas());
+        }
+
+        return ResponseEntity.ok(notas);
     }
 
     @PutMapping("/{id}")

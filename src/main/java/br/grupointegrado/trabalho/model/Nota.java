@@ -1,5 +1,8 @@
 package br.grupointegrado.trabalho.model;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -11,15 +14,16 @@ public class Nota {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "matricula_id")
-    private Matricula matricula;
-
-    @ManyToOne
     @JoinColumn(name = "disciplina_id")
     private Disciplina disciplina;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "matricula_id", referencedColumnName = "id")
+    @JsonIgnoreProperties("notas")
+    private Matricula matricula;
+
     @Column(columnDefinition = "DECIMAL(5,2)")
-    private Double nota;
+    private BigDecimal nota;
 
     private LocalDate dataLancamento;
 
@@ -47,11 +51,11 @@ public class Nota {
         this.disciplina = disciplina;
     }
 
-    public Double getNota() {
+    public BigDecimal getNota() {
         return nota;
     }
 
-    public void setNota(Double nota) {
+    public void setNota(BigDecimal nota) {
         this.nota = nota;
     }
 
@@ -62,4 +66,7 @@ public class Nota {
     public void setDataLancamento(LocalDate dataLancamento) {
         this.dataLancamento = dataLancamento;
     }
+
+
+
 }

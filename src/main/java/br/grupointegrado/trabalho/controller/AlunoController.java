@@ -1,12 +1,19 @@
 package br.grupointegrado.trabalho.controller;
 
 import br.grupointegrado.trabalho.dto.AlunoRequestDTO;
+import br.grupointegrado.trabalho.dto.DisciplinaResponseDTO;
+import br.grupointegrado.trabalho.dto.NotaResponseDTO;
+import br.grupointegrado.trabalho.dto.RelatorioResponseDTO;
 import br.grupointegrado.trabalho.model.Aluno;
+import br.grupointegrado.trabalho.model.Disciplina;
+import br.grupointegrado.trabalho.model.Matricula;
+import br.grupointegrado.trabalho.model.Nota;
 import br.grupointegrado.trabalho.repository.AlunoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -48,6 +55,33 @@ public class AlunoController {
     	aluno.setDataNascimento(dto.dataNascimento());
 
         return ResponseEntity.ok(this.repository.save(aluno));
+    }
+
+
+    @GetMapping("/{aluno_id}/boletim")
+    public ResponseEntity<RelatorioResponseDTO> findNotas(@PathVariable Integer aluno_id) {
+        Aluno aluno = this.repository.findById(aluno_id)
+                .orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado."));
+
+        List<NotaResponseDTO> notas = new ArrayList<>();
+
+        if (!aluno.getMatricula().isEmpty()) {
+            for (Matricula matricula : aluno.getMatriculas()) {
+                for (Nota nota : matricula.getNotas()) {
+                    notas.add(
+                            new NotaResponseDTO(
+                                    nota.getNota(),
+                                    nota.getDataLancamento(),
+                                    new DisciplinaResponseDTO(
+                                            nota.getDisciplina().getNome(),
+                                            nota.getDisciplina().getCodigo()
+                                    )
+                            )
+                    );
+                }
+            }
+        }
+        return ResponseEntity.ok(new RelatorioResponseDTO(notas));
     }
 
     @DeleteMapping("/{id}")
